@@ -12,7 +12,7 @@ public class Timer : MonoBehaviour
 
     private void Start()
     {
-        _timeLeft = timeMax;
+        
     }
     private void Update()
     {
@@ -27,6 +27,7 @@ public class Timer : MonoBehaviour
 
     public void StartTimer()
     {
+        _timeLeft = timeMax;
         timerWork = true;
     }
 
