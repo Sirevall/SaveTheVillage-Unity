@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
     public float time;
-    public GameObject timerImage;
+    public Image timerField;
     public bool timeOver;
     private float _timeLeft;
 
@@ -19,6 +20,7 @@ public class Timer : MonoBehaviour
     {
         Tick();
         CheckTimerStatus();
+        DisplayTimeLeft();
     }
 
     private void Tick()
@@ -36,5 +38,9 @@ public class Timer : MonoBehaviour
             _timeLeft = time;
             timeOver = true;
         }
+    }
+    private void DisplayTimeLeft()
+    {
+        timerField.fillAmount = _timeLeft / time;
     }
 }
