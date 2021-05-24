@@ -22,20 +22,23 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        wheatProductionTimer.time = wheatProductionTime;
+        wheatProductionTimer.timeMax = wheatProductionTime;
     }
 
     private void Start()
     {
-        
+        wheatProductionTimer.StartTimer();
         PrintInfo();
     }
 
     private void Update()
     {
         PrintInfo();
-        if (wheatProductionTimer.timeOver)
+        if (wheatProductionTimer.timerWork == false)
+        {
             CreateWheat();
+            wheatProductionTimer.StartTimer();
+        }
     }
 
     public void CreateWarrior()

@@ -5,22 +5,29 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    public float time;
+    public float timeMax;
     public Image timerField;
-    public bool timeOver;
+    public bool timerWork = false;
     private float _timeLeft;
 
-    void Start()
+    private void Start()
     {
-        _timeLeft = time;
+        _timeLeft = timeMax;
+    }
+    private void Update()
+    {
+        if (timerWork)
+        {
+            Tick();
+            CheckTimerStatus();
+            DisplayTimeLeft();
+        }
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public void StartTimer()
     {
-        Tick();
-        CheckTimerStatus();
-        DisplayTimeLeft();
+        timerWork = true;
     }
 
     private void Tick()
@@ -29,18 +36,13 @@ public class Timer : MonoBehaviour
     }
     private void CheckTimerStatus()
     {
-        if (_timeLeft > 0)
+        if (_timeLeft <= 0)
         {
-            timeOver = false;
-        }
-        else
-        {
-            _timeLeft = time;
-            timeOver = true;
+            timerWork = false;
         }
     }
     private void DisplayTimeLeft()
     {
-        timerField.fillAmount = _timeLeft / time;
+        timerField.fillAmount = _timeLeft / timeMax;
     }
 }
