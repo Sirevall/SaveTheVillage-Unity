@@ -40,7 +40,6 @@ public class GameManager : MonoBehaviour
             wheatProductionTimer.StartTimer();
         }
     }
-
     public void CreateWarrior()
     {
         if (wheat > 0 && (wheat - warriorPrice) > 0)
@@ -54,7 +53,6 @@ public class GameManager : MonoBehaviour
     {
         wheat += (peasants * peasantProduce);
     }
-
     private void PrintInfo()
     {
         infoText.text = $"Воины: {warriors}\n\n Крестьяне: {peasants}\n\n Пшеница: {wheat}\n\n Погибло: {_dead}";
