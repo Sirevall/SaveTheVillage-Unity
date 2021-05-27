@@ -5,56 +5,80 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public int peasants;
-    public int warriors;
-    public int wheat;
-    public int peasantPrice;
-    public int warriorPrice;
-    public int peasantProduce;
-    public int warriorConsume;
-    public float wheatProductionTime;
+    [SerializeField] private int _peasants;
+    [SerializeField] private int _warriors;
+    [SerializeField] private int _wheat;
 
-    public Text infoText;
+    [SerializeField] private int _peasantPrice;
+    [SerializeField] private int _warriorPrice;
 
-    public Timer wheatProductionTimer;
+    [SerializeField] private int _peasantProduce;
+    [SerializeField] private int _warriorConsume;
+
+    //Поля времени здесь для настройки, в дальнейшем время таймера перенести в класс таймера
+    [SerializeField] private float _wheatProductionTime;
+    [SerializeField] private float _wheatConsumeTime;
+    [SerializeField] private float _waveTime;
+    [SerializeField] private float _hireWarriorTime;
+    [SerializeField] private float _hirePeasantTime;
+
+    [SerializeField] private Timer _wheatProductionTimer;
+    [SerializeField] private Timer _wheatConsumeTimer;
+    [SerializeField] private Timer _waveTimer;
+    [SerializeField] private Timer _hireWarriorTimer;
+    [SerializeField] private Timer _hirePeasantTimer;
+
+    [SerializeField] private Text _infoResourcesText;
+    [SerializeField] private Text _infoEnemyWaveText;
 
     private int _dead = 0;
 
     private void Awake()
     {
-        wheatProductionTimer.TimerTime = wheatProductionTime;
+        _wheatProductionTimer.TimerTime = _wheatProductionTime;
     }
 
     private void Start()
     {
-        wheatProductionTimer.StartTimer();
+        _wheatProductionTimer.StartTimer();
         PrintInfo();
     }
 
     private void Update()
     {
         PrintInfo();
-        if (wheatProductionTimer.TimerWork == false)
+        if (_wheatProductionTimer.TimerWork == false)
         {
             CreateWheat();
-            wheatProductionTimer.StartTimer();
+            _wheatProductionTimer.StartTimer();
         }
     }
-    public void CreateWarrior()
+    // Это бред отдельный метод на создание юнита.
+    //Надо создавать или класс создания юнитов, или передавать в инспекторе метод с 2-мя параметрами.
+    public void HireWarrior()
     {
-        if (wheat > 0 && (wheat - warriorPrice) > 0)
+        if (_wheat > 0 && (_wheat - _warriorPrice) > 0)
         {
-            ++warriors;
-            wheat -= warriorPrice;
+            ++_warriors;
+            _wheat -= _warriorPrice;
         }
         
     }
+    public void HirePeasant()
+    {
+        if (_wheat > 0 && (_wheat - _peasantPrice) > 0)
+        {
+            ++_peasants;
+            _wheat -= _peasantPrice;
+        }
+
+    }
     private void CreateWheat()
     {
-        wheat += (peasants * peasantProduce);
+        _wheat += (_peasants * _peasantProduce);
     }
     private void PrintInfo()
     {
-        infoText.text = $"Воины: {warriors}\n\n Крестьяне: {peasants}\n\n Пшеница: {wheat}\n\n Погибло: {_dead}";
+        infoText.text = $"Воины: {_warriors}\n\n Крестьяне: {_peasants}\n\n Пшеница: {_wheat}\n\n Погибло: {_dead}";
     }
 }
