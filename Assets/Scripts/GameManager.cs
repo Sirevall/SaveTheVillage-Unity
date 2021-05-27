@@ -36,11 +36,16 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _wheatProductionTimer.TimerTime = _wheatProductionTime;
+        _wheatConsumeTimer.TimerTime = _wheatConsumeTime;
+        _waveTimer.TimerTime = _waveTime;
+        _hirePeasantTimer.TimerTime = _hirePeasantTime;
+        _hireWarriorTimer.TimerTime = _hireWarriorTime;
     }
 
     private void Start()
     {
         _wheatProductionTimer.StartTimer();
+        _wheatConsumeTimer.StartTimer();
         PrintInfo();
     }
 
@@ -51,6 +56,12 @@ public class GameManager : MonoBehaviour
         {
             CreateWheat();
             _wheatProductionTimer.StartTimer();
+        }
+
+        if (_wheatConsumeTimer.TimerWork == false)
+        {
+            ConsumeWheat();
+            _wheatConsumeTimer.StartTimer();
         }
     }
     // Это бред отдельный метод на создание юнита.
@@ -77,8 +88,20 @@ public class GameManager : MonoBehaviour
     {
         _wheat += (_peasants * _peasantProduce);
     }
+    private void ConsumeWheat()
+    {
+        if (_wheat >= (_warriors * _warriorConsume))
+        {
+            _wheat -= (_warriors * _warriorConsume);
+        }
+        else
+        {
+            _dead += _warriors;
+            _warriors = 0;
+        }
+    }
     private void PrintInfo()
     {
-        infoText.text = $"Воины: {_warriors}\n\n Крестьяне: {_peasants}\n\n Пшеница: {_wheat}\n\n Погибло: {_dead}";
+        _infoResourcesText.text = $"Воины: {_warriors}\n\n Крестьяне: {_peasants}\n\n Пшеница: {_wheat}\n\n Погибло: {_dead}";
     }
 }
