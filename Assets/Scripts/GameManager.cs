@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
     //Надо создавать или класс создания юнитов, или передавать в инспекторе метод с 2-мя параметрами.
     public void HireWarrior()
     {
-        if (_wheat > 0 && (_wheat - _warriorPrice) > 0)
+        if (_wheat > _warriorPrice)
         {
             ++_warriors;
             _wheat -= _warriorPrice;
@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
     }
     public void HirePeasant()
     {
-        if (_wheat > 0 && (_wheat - _peasantPrice) > 0)
+        if (_wheat >= _peasantPrice)
         {
             ++_peasants;
             _wheat -= _peasantPrice;
