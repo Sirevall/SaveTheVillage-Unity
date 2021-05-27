@@ -5,9 +5,11 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    public float timeMax;
-    public Image timerField;
-    public bool timerWork = false;
+    [SerializeField] private Image _timerField;
+
+    private float _timerTime;
+    
+    private bool _timerWork = false;
     private float _timeLeft;
 
     private void Start()
@@ -16,7 +18,7 @@ public class Timer : MonoBehaviour
     }
     private void Update()
     {
-        if (timerWork)
+        if (_timerWork)
         {
             Tick();
             CheckTimerStatus();
@@ -24,11 +26,26 @@ public class Timer : MonoBehaviour
         }
 
     }
+    public bool TimerWork
+    {
+        get 
+        {
+            return _timerWork;
+        }
+    }
+
+    public float TimerTime
+    {
+        set
+        {
+            _timerTime = value;
+        }
+    }
 
     public void StartTimer()
     {
-        _timeLeft = timeMax;
-        timerWork = true;
+        _timeLeft = _timerTime;
+        _timerWork = true;
     }
 
     private void Tick()
@@ -39,11 +56,11 @@ public class Timer : MonoBehaviour
     {
         if (_timeLeft <= 0)
         {
-            timerWork = false;
+            _timerWork = false;
         }
     }
     private void DisplayTimeLeft()
     {
-        timerField.fillAmount = _timeLeft / timeMax;
+        _timerField.fillAmount = _timeLeft / _timerTime;
     }
 }

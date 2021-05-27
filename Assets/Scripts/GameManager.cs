@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        wheatProductionTimer.timeMax = wheatProductionTime;
+        wheatProductionTimer.TimerTime = wheatProductionTime;
     }
 
     private void Start()
@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         PrintInfo();
-        if (wheatProductionTimer.timerWork == false)
+        if (wheatProductionTimer.TimerWork == false)
         {
             CreateWheat();
             wheatProductionTimer.StartTimer();
