@@ -9,8 +9,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _warriors;
     [SerializeField] private int _wheat;
 
-    [SerializeField] private int _peasantPrice;
-    [SerializeField] private int _warriorPrice;
+    [SerializeField] private int _peasantCost;
+    [SerializeField] private int _warriorCost;
 
     [SerializeField] private int _peasantProduce;
     [SerializeField] private int _warriorConsume;
@@ -31,58 +31,80 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text _infoResourcesText;
     [SerializeField] private Text _infoEnemyWaveText;
 
+    [SerializeField] private Button _hireWarriorButton;
+    [SerializeField] private Button _hirePeasantButton;
+
     private int _dead = 0;
 
     private void Awake()
     {
-        _wheatProductionTimer.TimerTime = _wheatProductionTime;
-        _wheatConsumeTimer.TimerTime = _wheatConsumeTime;
-        _waveTimer.TimerTime = _waveTime;
-        _hirePeasantTimer.TimerTime = _hirePeasantTime;
-        _hireWarriorTimer.TimerTime = _hireWarriorTime;
+        _wheatProductionTimer.TimeMax = _wheatProductionTime;
+        _wheatConsumeTimer.TimeMax = _wheatConsumeTime;
+        _waveTimer.TimeMax = _waveTime;
+        _hirePeasantTimer.TimeMax = _hirePeasantTime;
+        _hireWarriorTimer.TimeMax = _hireWarriorTime;
     }
 
     private void Start()
     {
-        _wheatProductionTimer.StartTimer();
-        _wheatConsumeTimer.StartTimer();
+        _wheatProductionTimer.Enable();
+        _wheatConsumeTimer.Enable();
         PrintInfo();
     }
 
     private void Update()
     {
-        PrintInfo();
-        if (_wheatProductionTimer.TimerWork == false)
+        if (_wheatProductionTimer.Running == false)
         {
             CreateWheat();
-            _wheatProductionTimer.StartTimer();
+            _wheatProductionTimer.Enable();
         }
 
-        if (_wheatConsumeTimer.TimerWork == false)
+        if (_wheatConsumeTimer.Running == false)
         {
             ConsumeWheat();
-            _wheatConsumeTimer.StartTimer();
+            _wheatConsumeTimer.Enable();
         }
+
+        if (_hireWarriorTimer.CycleCompleted == true)
+        {
+            _hireWarriorTimer.gameObject.SetActive(false);
+            _warriors++;
+            _hireWarriorTimer.CycleCompleted = false;
+            _hireWarriorButton.interactable = true;
+        }
+
+        if (_hirePeasantTimer.CycleCompleted == true)
+        {
+            _hirePeasantTimer.gameObject.SetActive(false);
+            _peasants++;
+            _hirePeasantTimer.CycleCompleted = false;
+            _hirePeasantButton.interactable = true;
+        }
+
+        PrintInfo();
     }
     // Это бред отдельный метод на создание юнита.
     //Надо создавать или класс создания юнитов, или передавать в инспекторе метод с 2-мя параметрами.
     public void HireWarrior()
     {
-        if (_wheat > _warriorPrice)
+        if (_wheat >= _warriorCost)
         {
-            ++_warriors;
-            _wheat -= _warriorPrice;
+            _wheat -= _warriorCost;
+            _hireWarriorButton.interactable = false;
+            _hireWarriorTimer.gameObject.SetActive(true);
+            _hireWarriorTimer.Enable();
         }
-        
     }
     public void HirePeasant()
     {
-        if (_wheat >= _peasantPrice)
+        if (_wheat >= _peasantCost)
         {
-            ++_peasants;
-            _wheat -= _peasantPrice;
+            _wheat -= _peasantCost;
+            _hirePeasantButton.interactable = false;
+            _hirePeasantTimer.gameObject.SetActive(true);
+            _hirePeasantTimer.Enable();
         }
-
     }
     private void CreateWheat()
     {
