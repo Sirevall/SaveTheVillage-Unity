@@ -319,7 +319,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9176761cbed6ec2499360be2d66ab701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timerField: {fileID: 687445676}
+  _timeDisplay: {fileID: 687445676}
 --- !u!1 &144514272
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,7 +336,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &144514273
 RectTransform:
   m_ObjectHideFlags: 0
@@ -370,7 +370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9176761cbed6ec2499360be2d66ab701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timerField: {fileID: 1315681928}
+  _timeDisplay: {fileID: 1315681928}
 --- !u!1 &176400867
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,9 +551,17 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u0412\u043E\u0438\u043D\u044B: 000\n\n\u041A\u0440\u0435\u0441\u0442\u044C\u044F\u043D\u0435:
-    999\n\n\u041F\u0448\u0435\u043D\u0438\u0446\u0430: 999\n\n\u041F\u043E\u0433\u0438\u0431\u043B\u043E:
-    999"
+  m_Text: 'Warriors: 000
+
+
+    Peasants: 999
+
+
+    Wheat: 999
+
+
+    Warriors Died:
+    999'
 --- !u!222 &195245879
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -578,7 +586,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 3.4, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &304264155
@@ -848,8 +856,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 60, y: -150}
-  m_SizeDelta: {x: 100, y: 125}
+  m_AnchoredPosition: {x: 72.76, y: -150}
+  m_SizeDelta: {x: 125.527405, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &553274246
 MonoBehaviour:
@@ -1201,7 +1209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9176761cbed6ec2499360be2d66ab701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timerField: {fileID: 1885857796}
+  _timeDisplay: {fileID: 1885857796}
 --- !u!224 &833130655
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1293,8 +1301,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u0412\u041E\u041B\u041D\u0410 10\n\u0412\u0440\u0430\u0433\u043E\u0432:
-    123"
+  m_Text: 'WAVE 10
+
+    Enemies: 123'
 --- !u!222 &849077931
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1393,7 +1402,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1087109495
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1427,7 +1436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9176761cbed6ec2499360be2d66ab701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timerField: {fileID: 2028118900}
+  _timeDisplay: {fileID: 2028118900}
 --- !u!1 &1198503288
 GameObject:
   m_ObjectHideFlags: 0
@@ -1553,7 +1562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9176761cbed6ec2499360be2d66ab701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timerField: {fileID: 484090616}
+  _timeDisplay: {fileID: 484090616}
 --- !u!1 &1315681926
 GameObject:
   m_ObjectHideFlags: 0
@@ -1731,11 +1740,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aedfd9b18403bbc4880dac1c67971cd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _peasants: 0
-  _warriors: 1
-  _wheat: 3
-  _peasantPrice: 10
-  _warriorPrice: 6
+  _peasants: 2
+  _warriors: 0
+  _wheat: 0
+  _peasantCost: 2
+  _warriorCost: 3
   _peasantProduce: 3
   _warriorConsume: 1
   _wheatProductionTime: 5
@@ -1750,6 +1759,8 @@ MonoBehaviour:
   _hirePeasantTimer: {fileID: 144514274}
   _infoResourcesText: {fileID: 195245878}
   _infoEnemyWaveText: {fileID: 849077930}
+  _hireWarriorButton: {fileID: 176400869}
+  _hirePeasantButton: {fileID: 719936341}
 --- !u!4 &1630756403
 Transform:
   m_ObjectHideFlags: 0

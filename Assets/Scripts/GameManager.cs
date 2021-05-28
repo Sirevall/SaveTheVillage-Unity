@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button _hireWarriorButton;
     [SerializeField] private Button _hirePeasantButton;
 
-    private int _dead = 0;
+    private int _died = 0;
 
     private void Awake()
     {
@@ -118,12 +118,12 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            _dead += _warriors;
+            _died += _warriors;
             _warriors = 0;
         }
     }
     private void PrintInfo()
     {
-        _infoResourcesText.text = $"Воины: {_warriors}\n\n Крестьяне: {_peasants}\n\n Пшеница: {_wheat}\n\n Погибло: {_dead}";
+        _infoResourcesText.text = $"Warriors: {_warriors}\n\n Peasants: {_peasants}\n\n Wheat: {_wheat}\n\n Warriors Died: {_died}";
     }
 }
