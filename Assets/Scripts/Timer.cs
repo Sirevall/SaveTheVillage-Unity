@@ -5,62 +5,71 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    [SerializeField] private Image _timerField;
+    [SerializeField] private Image _timeDisplay;
 
-    private float _timerTime;
-    
-    private bool _timerWork = false;
+    private float _timeMax;
+
+    private bool _running = false;
+    private bool _cycleCompleted = false;
     private float _timeLeft;
 
-    private void Start()
-    {
-        
-    }
     private void Update()
     {
-        if (_timerWork)
+        if (_running)
         {
             Tick();
-            CheckTimerStatus();
+            CheckStatus();
             DisplayTimeLeft();
         }
 
     }
-    public bool TimerWork
+    public bool Running
     {
-        get 
+        get
         {
-            return _timerWork;
+            return _running;
         }
     }
 
-    public float TimerTime
+    public float TimeMax
     {
         set
         {
-            _timerTime = value;
+            _timeMax = value;
+        }
+    }
+    public bool CycleCompleted
+    {
+        get
+        {
+            return _cycleCompleted;
+        }
+        set
+        {
+            _cycleCompleted = value;
         }
     }
 
-    public void StartTimer()
+    public void Enable()
     {
-        _timeLeft = _timerTime;
-        _timerWork = true;
+        _timeLeft = _timeMax;
+        _running = true;
     }
 
     private void Tick()
     {
-        _timeLeft -= Time.deltaTime;
+        _timeLeft -= UnityEngine.Time.deltaTime;
     }
-    private void CheckTimerStatus()
+    private void CheckStatus()
     {
         if (_timeLeft <= 0)
         {
-            _timerWork = false;
+            _running = false;
+            _cycleCompleted = true;
         }
     }
     private void DisplayTimeLeft()
     {
-        _timerField.fillAmount = _timeLeft / _timerTime;
+        _timeDisplay.fillAmount = _timeLeft / _timeMax;
     }
 }
