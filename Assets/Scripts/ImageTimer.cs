@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Timer : MonoBehaviour
+public class ImageTimer : MonoBehaviour
 {
     [SerializeField] private Image _timeDisplay;
-
-    private float _timeMax;
+    [SerializeField] private float _timeMax;
 
     private bool _running = false;
     private bool _cycleCompleted = false;
@@ -58,7 +57,7 @@ public class Timer : MonoBehaviour
 
     private void Tick()
     {
-        _timeLeft -= UnityEngine.Time.deltaTime;
+        _timeLeft -= Time.deltaTime;
     }
     private void CheckStatus()
     {

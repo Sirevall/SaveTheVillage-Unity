@@ -15,18 +15,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _peasantProduce;
     [SerializeField] private int _warriorConsume;
 
-    //Поля времени здесь для настройки, в дальнейшем время таймера перенести в класс таймера
-    [SerializeField] private float _wheatProductionTime;
-    [SerializeField] private float _wheatConsumeTime;
-    [SerializeField] private float _waveTime;
-    [SerializeField] private float _hireWarriorTime;
-    [SerializeField] private float _hirePeasantTime;
-
-    [SerializeField] private Timer _wheatProductionTimer;
-    [SerializeField] private Timer _wheatConsumeTimer;
-    [SerializeField] private Timer _waveTimer;
-    [SerializeField] private Timer _hireWarriorTimer;
-    [SerializeField] private Timer _hirePeasantTimer;
+    [SerializeField] private ImageTimer _wheatProductionTimer;
+    [SerializeField] private ImageTimer _wheatConsumeTimer;
+    [SerializeField] private ImageTimer _waveTimer;
+    [SerializeField] private ImageTimer _hireWarriorTimer;
+    [SerializeField] private ImageTimer _hirePeasantTimer;
+    [SerializeField] private HandicapTimer _handicapTimer;
 
     [SerializeField] private Text _infoResourcesText;
     [SerializeField] private Text _infoEnemyWaveText;
@@ -35,15 +29,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button _hirePeasantButton;
 
     private int _died = 0;
-
-    private void Awake()
-    {
-        _wheatProductionTimer.TimeMax = _wheatProductionTime;
-        _wheatConsumeTimer.TimeMax = _wheatConsumeTime;
-        _waveTimer.TimeMax = _waveTime;
-        _hirePeasantTimer.TimeMax = _hirePeasantTime;
-        _hireWarriorTimer.TimeMax = _hireWarriorTime;
-    }
 
     private void Start()
     {
@@ -54,6 +39,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (_handicapTimer.HandicapeOut == true)
+            _waveTimer.Enable();
+
         if (_wheatProductionTimer.Running == false)
         {
             CreateWheat();
