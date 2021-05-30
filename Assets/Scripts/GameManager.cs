@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _peasants;
     [SerializeField] private int _warriors;
     [SerializeField] private int _wheat;
+    [SerializeField] private int[] _waveEnemies;
 
     [SerializeField] private int _peasantCost;
     [SerializeField] private int _warriorCost;
@@ -29,32 +30,35 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button _hirePeasantButton;
 
     private int _died = 0;
+    private int _wave = 0;
 
     private void Start()
     {
         _wheatProductionTimer.Enable();
         _wheatConsumeTimer.Enable();
-        PrintInfo();
+        PrintResourcesInfo();
+        PrintWaveInfo();
     }
-
     private void Update()
     {
-        if (_handicapTimer.HandicapeOut == true)
+        CheckAmountWheat();
+
+        if (_handicapTimer.HandicapeOut)
             _waveTimer.Enable();
 
-        if (_wheatProductionTimer.Running == false)
+        if (_wheatProductionTimer.CycleCompleted)
         {
             CreateWheat();
             _wheatProductionTimer.Enable();
         }
 
-        if (_wheatConsumeTimer.Running == false)
+        if (_wheatConsumeTimer.CycleCompleted)
         {
             ConsumeWheat();
             _wheatConsumeTimer.Enable();
         }
 
-        if (_hireWarriorTimer.CycleCompleted == true)
+        if (_hireWarriorTimer.CycleCompleted)
         {
             _hireWarriorTimer.gameObject.SetActive(false);
             _warriors++;
@@ -62,7 +66,7 @@ public class GameManager : MonoBehaviour
             _hireWarriorButton.interactable = true;
         }
 
-        if (_hirePeasantTimer.CycleCompleted == true)
+        if (_hirePeasantTimer.CycleCompleted)
         {
             _hirePeasantTimer.gameObject.SetActive(false);
             _peasants++;
@@ -70,29 +74,40 @@ public class GameManager : MonoBehaviour
             _hirePeasantButton.interactable = true;
         }
 
-        PrintInfo();
+        if (_waveTimer.CycleCompleted)
+        {
+            if (_wave < _waveEnemies.Length - 1)
+            {
+                _warriors -= _waveEnemies[_wave];
+                _wave++;
+                _waveTimer.Enable();
+            }
+            else
+            {
+                _warriors -= _waveEnemies[_wave];
+                _waveTimer.CycleCompleted = false;
+                _waveTimer.gameObject.SetActive(false);
+            }
+        }
+
+        PrintResourcesInfo();
+        PrintWaveInfo();
     }
     // Это бред отдельный метод на создание юнита.
     //Надо создавать или класс создания юнитов, или передавать в инспекторе метод с 2-мя параметрами.
     public void HireWarrior()
     {
-        if (_wheat >= _warriorCost)
-        {
             _wheat -= _warriorCost;
             _hireWarriorButton.interactable = false;
             _hireWarriorTimer.gameObject.SetActive(true);
             _hireWarriorTimer.Enable();
-        }
     }
     public void HirePeasant()
     {
-        if (_wheat >= _peasantCost)
-        {
             _wheat -= _peasantCost;
             _hirePeasantButton.interactable = false;
             _hirePeasantTimer.gameObject.SetActive(true);
             _hirePeasantTimer.Enable();
-        }
     }
     private void CreateWheat()
     {
@@ -110,8 +125,31 @@ public class GameManager : MonoBehaviour
             _warriors = 0;
         }
     }
-    private void PrintInfo()
+    private void PrintResourcesInfo()
     {
-        _infoResourcesText.text = $"Warriors: {_warriors}\n\n Peasants: {_peasants}\n\n Wheat: {_wheat}\n\n Warriors Died: {_died}";
+        _infoResourcesText.text = $"Warriors: {_warriors}\n\nPeasants: {_peasants}\n\nWheat: {_wheat}\n\nWarriors Died: {_died}";
+    }
+    private void PrintWaveInfo()
+    {
+        if (_wave == _waveEnemies.Length - 1)
+        {
+            _infoEnemyWaveText.text = $"WAVE: {_wave + 1}\nEnemies: {_waveEnemies[_wave]}";
+        }
+        else
+        {
+            _infoEnemyWaveText.text = $"WAVE: {_wave + 1}\nEnemies: {_waveEnemies[_wave]}\n\nNEXT WAVE: {_wave + 2}\nEnemies: {_waveEnemies[_wave + 1]}";
+        }
+
+    }
+    private void CheckAmountWheat()
+    {
+        if (_wheat < _warriorCost || _hireWarriorTimer.Running == true)
+            _hireWarriorButton.interactable = false;
+        else
+            _hireWarriorButton.interactable = true;
+        if (_wheat < _peasantCost || _hirePeasantTimer.Running == true)
+            _hirePeasantButton.interactable = false;
+        else
+            _hirePeasantButton.interactable = true;
     }
 }

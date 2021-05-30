@@ -22,14 +22,6 @@ public class ImageTimer : MonoBehaviour
         }
 
     }
-    public bool Running
-    {
-        get
-        {
-            return _running;
-        }
-    }
-
     public float TimeMax
     {
         set
@@ -48,13 +40,19 @@ public class ImageTimer : MonoBehaviour
             _cycleCompleted = value;
         }
     }
-
+    public bool Running
+    {
+        get
+        {
+            return _running;
+        }
+    }
     public void Enable()
     {
         _timeLeft = _timeMax;
         _running = true;
+        _cycleCompleted = false;
     }
-
     private void Tick()
     {
         _timeLeft -= Time.deltaTime;
