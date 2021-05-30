@@ -44,7 +44,9 @@ public class GameManager : MonoBehaviour
         SwitchButton();
 
         if (_handicapTimer.HandicapeOut)
+        {
             _waveTimer.Enable();
+        }
 
         if (_wheatProductionTimer.CycleCompleted)
         {
@@ -59,13 +61,20 @@ public class GameManager : MonoBehaviour
         }
 
         if (_hireWarriorTimer.CycleCompleted)
+        {
             HireWarrior();
+        }
 
         if (_hirePeasantTimer.CycleCompleted)
+        {
             HirePeasant();
+        }
 
         if (_waveTimer.CycleCompleted)
+        {
             EnemyAttack();
+            WaveState();
+        }
 
         PrintResourcesInfo();
         PrintWaveInfo();
@@ -102,18 +111,9 @@ public class GameManager : MonoBehaviour
     }
     private void EnemyAttack()
     {
-        if (_wave < _waveEnemies.Length - 1)
-        {
-            _warriors -= _waveEnemies[_wave];
-            _wave++;
-            _waveTimer.Enable();
-        }
-        else
-        {
-            _warriors -= _waveEnemies[_wave];
-            _waveTimer.CycleCompleted = false;
-            _waveTimer.gameObject.SetActive(false);
-        }
+        int temp = _warriors;
+        _warriors -= _waveEnemies[_wave];
+        _died += (temp - _warriors);
     }
     private void CreateWheat()
     {
@@ -146,6 +146,19 @@ public class GameManager : MonoBehaviour
             _infoEnemyWaveText.text = $"WAVE: {_wave + 1}\nEnemies: {_waveEnemies[_wave]}\n\nNEXT WAVE\nEnemies: {_waveEnemies[_wave + 1]}";
         }
 
+    }
+    private void WaveState()
+    {
+        if (_wave < _waveEnemies.Length - 1)
+        {
+            _wave++;
+            _waveTimer.Enable();
+        }
+        else
+        {
+            _waveTimer.CycleCompleted = false;
+            _waveTimer.gameObject.SetActive(false);
+        }
     }
     private void SwitchButton()
     {
