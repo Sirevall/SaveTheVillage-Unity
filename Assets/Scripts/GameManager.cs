@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
-        CheckAmountWheat();
+        SwitchButton();
 
         if (_handicapTimer.HandicapeOut)
             _waveTimer.Enable();
@@ -59,55 +59,61 @@ public class GameManager : MonoBehaviour
         }
 
         if (_hireWarriorTimer.CycleCompleted)
-        {
-            _hireWarriorTimer.gameObject.SetActive(false);
-            _warriors++;
-            _hireWarriorTimer.CycleCompleted = false;
-            _hireWarriorButton.interactable = true;
-        }
+            HireWarrior();
 
         if (_hirePeasantTimer.CycleCompleted)
-        {
-            _hirePeasantTimer.gameObject.SetActive(false);
-            _peasants++;
-            _hirePeasantTimer.CycleCompleted = false;
-            _hirePeasantButton.interactable = true;
-        }
+            HirePeasant();
 
         if (_waveTimer.CycleCompleted)
-        {
-            if (_wave < _waveEnemies.Length - 1)
-            {
-                _warriors -= _waveEnemies[_wave];
-                _wave++;
-                _waveTimer.Enable();
-            }
-            else
-            {
-                _warriors -= _waveEnemies[_wave];
-                _waveTimer.CycleCompleted = false;
-                _waveTimer.gameObject.SetActive(false);
-            }
-        }
+            EnemyAttack();
 
         PrintResourcesInfo();
         PrintWaveInfo();
     }
     // Это бред отдельный метод на создание юнита.
     //Надо создавать или класс создания юнитов, или передавать в инспекторе метод с 2-мя параметрами.
-    public void HireWarrior()
+    public void HireWarriorButtonClick()
     {
-            _wheat -= _warriorCost;
-            _hireWarriorButton.interactable = false;
-            _hireWarriorTimer.gameObject.SetActive(true);
-            _hireWarriorTimer.Enable();
+        _wheat -= _warriorCost;
+        _hireWarriorButton.interactable = false;
+        _hireWarriorTimer.gameObject.SetActive(true);
+        _hireWarriorTimer.Enable();
     }
-    public void HirePeasant()
+    public void HirePeasantButtonClick()
     {
-            _wheat -= _peasantCost;
-            _hirePeasantButton.interactable = false;
-            _hirePeasantTimer.gameObject.SetActive(true);
-            _hirePeasantTimer.Enable();
+        _wheat -= _peasantCost;
+        _hirePeasantButton.interactable = false;
+        _hirePeasantTimer.gameObject.SetActive(true);
+        _hirePeasantTimer.Enable();
+    }
+    private void HireWarrior()
+    {
+        _hireWarriorTimer.gameObject.SetActive(false);
+        _warriors++;
+        _hireWarriorTimer.CycleCompleted = false;
+        _hireWarriorButton.interactable = true;
+    }
+    private void HirePeasant()
+    {
+        _hirePeasantTimer.gameObject.SetActive(false);
+        _peasants++;
+        _hirePeasantTimer.CycleCompleted = false;
+        _hirePeasantButton.interactable = true;
+    }
+    private void EnemyAttack()
+    {
+        if (_wave < _waveEnemies.Length - 1)
+        {
+            _warriors -= _waveEnemies[_wave];
+            _wave++;
+            _waveTimer.Enable();
+        }
+        else
+        {
+            _warriors -= _waveEnemies[_wave];
+            _waveTimer.CycleCompleted = false;
+            _waveTimer.gameObject.SetActive(false);
+        }
     }
     private void CreateWheat()
     {
@@ -137,16 +143,17 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            _infoEnemyWaveText.text = $"WAVE: {_wave + 1}\nEnemies: {_waveEnemies[_wave]}\n\nNEXT WAVE: {_wave + 2}\nEnemies: {_waveEnemies[_wave + 1]}";
+            _infoEnemyWaveText.text = $"WAVE: {_wave + 1}\nEnemies: {_waveEnemies[_wave]}\n\nNEXT WAVE\nEnemies: {_waveEnemies[_wave + 1]}";
         }
 
     }
-    private void CheckAmountWheat()
+    private void SwitchButton()
     {
         if (_wheat < _warriorCost || _hireWarriorTimer.Running == true)
             _hireWarriorButton.interactable = false;
         else
             _hireWarriorButton.interactable = true;
+
         if (_wheat < _peasantCost || _hirePeasantTimer.Running == true)
             _hirePeasantButton.interactable = false;
         else
