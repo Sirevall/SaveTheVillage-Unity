@@ -24,16 +24,22 @@ public class GameManager : MonoBehaviour
     [SerializeField] private HandicapTimer _handicapTimer;
 
     [SerializeField] private Text _infoResourcesText;
-    [SerializeField] private Text _infoEnemyWaveText;
+    [SerializeField] private Text _infoWave;
+    [SerializeField] private Text _infoNextWave;
 
     [SerializeField] private Button _hireWarriorButton;
     [SerializeField] private Button _hirePeasantButton;
 
     private int _died = 0;
     private int _wave = 0;
+    private Text _peasantCostText;
+    private Text _warriorCostText;
 
     private void Start()
     {
+        _peasantCostText = _hirePeasantButton.transform.Find("PeasantCostText").GetComponent<Text>();
+        _warriorCostText = _hireWarriorButton.transform.Find("WarriorCostText").GetComponent<Text>();
+
         _wheatProductionTimer.Enable();
         _wheatConsumeTimer.Enable();
 
@@ -77,6 +83,8 @@ public class GameManager : MonoBehaviour
             WaveState();
         }
 
+        _peasantCostText.text = _peasantCost.ToString();
+        _warriorCostText.text = _warriorCost.ToString();
         PrintResourcesInfo();
         PrintWaveInfo();
     }
@@ -140,17 +148,21 @@ public class GameManager : MonoBehaviour
     }
     private void PrintResourcesInfo()
     {
-        _infoResourcesText.text = $"Warriors: {_warriors}\n\nPeasants: {_peasants}\n\nWheat: {_wheat}\n\nWarriors Died: {_died}";
+        _infoResourcesText.text = $"{_warriors}\n\n{_peasants}\n\n{_died}\n\n{_wheat}";
     }
     private void PrintWaveInfo()
     {
         if (_wave == _waveEnemies.Length - 1)
         {
-            _infoEnemyWaveText.text = $"WAVE: {_wave + 1}\nEnemies: {_waveEnemies[_wave]}";
+            // Сомнительная вещь, но надо выключить родительский объект
+            _infoNextWave.gameObject.transform.parent.gameObject.SetActive(false);
+
+            _infoWave.text = $"WAVE: {_wave + 1}\n\n\t\t{_waveEnemies[_wave]}";
         }
         else
         {
-            _infoEnemyWaveText.text = $"WAVE: {_wave + 1}\nEnemies: {_waveEnemies[_wave]}\n\nNEXT WAVE\nEnemies: {_waveEnemies[_wave + 1]}";
+            _infoWave.text = $"WAVE: {_wave + 1}\n\n\t\t{_waveEnemies[_wave]}";
+            _infoNextWave.text = $"NEXT WAVE\n\n\t\t{_waveEnemies[_wave + 1]}";
         }
 
     }
@@ -183,5 +195,5 @@ public class GameManager : MonoBehaviour
     {
         return cost += multiplier;
     }
-    
+
 }

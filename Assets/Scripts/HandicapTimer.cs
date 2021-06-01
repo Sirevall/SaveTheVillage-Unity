@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class HandicapTimer : MonoBehaviour
 {
-    [SerializeField] private Text _timeLeftText;
+    [SerializeField] private Text _timeLeft;
+    [SerializeField] private Text _info;
     [SerializeField] private float _timeMax;
 
     private bool _handicapeOut = false;
@@ -16,7 +17,7 @@ public class HandicapTimer : MonoBehaviour
         if (_timeMax >= 0)
         {
             _timeMax -= Time.deltaTime;
-            _timeLeftText.text = Math.Ceiling(_timeMax).ToString();
+            _timeLeft.text = Math.Ceiling(_timeMax).ToString();
         }
         else if (_timeMax == -1f)
         {
@@ -25,8 +26,9 @@ public class HandicapTimer : MonoBehaviour
         else
         {
             _handicapeOut = true;
-           _timeMax = -1f;
-            _timeLeftText.gameObject.SetActive(false);
+            _timeMax = -1f;
+            _timeLeft.gameObject.SetActive(false);
+            _info.gameObject.SetActive(false);
         }
     }
     public bool HandicapeOut
