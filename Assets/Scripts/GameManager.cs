@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     {
         _wheatProductionTimer.Enable();
         _wheatConsumeTimer.Enable();
+
         PrintResourcesInfo();
         PrintWaveInfo();
     }
@@ -79,8 +80,6 @@ public class GameManager : MonoBehaviour
         PrintResourcesInfo();
         PrintWaveInfo();
     }
-    // Это бред отдельный метод на создание юнита.
-    //Надо создавать или класс создания юнитов, или передавать в инспекторе метод с 2-мя параметрами.
     public void HireWarriorButtonClick()
     {
         _wheat -= _warriorCost;
@@ -91,6 +90,7 @@ public class GameManager : MonoBehaviour
     public void HirePeasantButtonClick()
     {
         _wheat -= _peasantCost;
+        _peasantCost = CostMultiplier(_peasantCost, multiplier: 2);
         _hirePeasantButton.interactable = false;
         _hirePeasantTimer.gameObject.SetActive(true);
         _hirePeasantTimer.Enable();
@@ -111,9 +111,16 @@ public class GameManager : MonoBehaviour
     }
     private void EnemyAttack()
     {
-        int temp = _warriors;
-        _warriors -= _waveEnemies[_wave];
-        _died += (temp - _warriors);
+        if (_warriors >= _waveEnemies[_wave])
+        {
+            _warriors -= _waveEnemies[_wave];
+            _died += _waveEnemies[_wave];
+        }
+        else
+        {
+            _died += _warriors;
+        }
+
     }
     private void CreateWheat()
     {
@@ -172,4 +179,9 @@ public class GameManager : MonoBehaviour
         else
             _hirePeasantButton.interactable = true;
     }
+    private int CostMultiplier(int cost, int multiplier)
+    {
+        return cost += multiplier;
+    }
+    
 }
