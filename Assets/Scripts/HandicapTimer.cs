@@ -38,4 +38,11 @@ public class HandicapTimer : MonoBehaviour
             return _handicapeOut;
         }
     }
+    public void RestartTimer(float time)
+    {
+        _handicapeOut = false;
+        _timeLeft.gameObject.SetActive(true);
+        _info.gameObject.SetActive(true);
+        _timeMax = time;
+    }
 }

@@ -49,8 +49,18 @@ public class ImageTimer : MonoBehaviour
     }
     public void Enable()
     {
-        _timeLeft = _timeMax;
+        RestartTimer();
         _running = true;
+    }
+    public void Disable()
+    {
+        RestartTimer();
+        _running = false;
+    }
+    public void RestartTimer()
+    {
+        _timeLeft = _timeMax;
+        _timeDisplay.fillAmount = 1f;
         _cycleCompleted = false;
     }
     private void Tick()
