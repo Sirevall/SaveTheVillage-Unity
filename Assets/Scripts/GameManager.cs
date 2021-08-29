@@ -4,6 +4,10 @@ using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
+    public UnityEvent GameEnd;
+    public GameObject SoundButton;
+    public GameObject PauseButton;
+
     [SerializeField] private int _peasants;
     [SerializeField] private int _warriors;
     [SerializeField] private int _wheat;
@@ -30,6 +34,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button _hirePeasantButton;
 
     [SerializeField] private GameObject ResultPanel;
+    [SerializeField] private AudioController _audioController;
 
     private int _died = 0;
     private int _wave = 0;
@@ -38,15 +43,20 @@ public class GameManager : MonoBehaviour
     private bool _gameOver = false;
     private bool _villageCaptured = false;
     private bool _warriorsConsumeWheat = false;
-
-    public UnityEvent GameEnd;
+    private Image _soundButtonBackground;
+    private bool _musicIsPlaying;
+    private bool _gamePaused;
 
     private void Start()
     {
         _peasantCostText = _hirePeasantButton.transform.Find("PeasantCostText").GetComponent<Text>();
         _warriorCostText = _hireWarriorButton.transform.Find("WarriorCostText").GetComponent<Text>();
+        _soundButtonBackground = SoundButton.transform.Find("SoundBackground").GetComponent<Image>();
 
         _wheatProductionTimer.Enable();
+
+        _audioController.PlayStartTheme();
+        _musicIsPlaying = true;
 
         PrintResourcesInfo();
         PrintWaveInfo();
@@ -64,15 +74,16 @@ public class GameManager : MonoBehaviour
         if (_handicapTimer.HandicapeOut)
         {
             _waveTimer.Enable();
+            _audioController.PlayAttackSound();
         }
 
-        if (_wheatProductionTimer.CycleCompleted && _warriorsConsumeWheat == true)
+        if (_wheatProductionTimer.CycleCompleted)
         {
             CreateWheat();
             _wheatProductionTimer.Enable();
         }
 
-        if (_wheatConsumeTimer.CycleCompleted)
+        if (_wheatConsumeTimer.CycleCompleted && _warriorsConsumeWheat == true)
         {
             ConsumeWheat();
             _wheatConsumeTimer.Enable();
@@ -91,6 +102,7 @@ public class GameManager : MonoBehaviour
         if (_waveTimer.CycleCompleted)
         {
             EnemyAttack();
+            CheckEndGame();
             WaveState();
         }
 
@@ -102,6 +114,8 @@ public class GameManager : MonoBehaviour
     }
     public void HireWarriorButtonClick()
     {
+        _audioController.PlayClickSound();
+
         _wheat -= _warriorCost;
         _hireWarriorButton.interactable = false;
         _hireWarriorTimer.gameObject.SetActive(true);
@@ -109,6 +123,8 @@ public class GameManager : MonoBehaviour
     }
     public void HirePeasantButtonClick()
     {
+        _audioController.PlayClickSound();
+
         _wheat -= _peasantCost;
         _peasantCost = CostMultiplier(_peasantCost, multiplier: 2);
         _hirePeasantButton.interactable = false;
@@ -128,7 +144,36 @@ public class GameManager : MonoBehaviour
         _waveTimer.gameObject.SetActive(true);
         _waveTimer.RestartTimer();
         _wheatProductionTimer.Enable();
-        _wheatConsumeTimer.Enable();
+
+        _audioController.PlayMainTheme();
+    }
+    public void ClickSoundButton()
+    {
+        if (_musicIsPlaying)
+        {
+            _audioController.SwitchSound(_musicIsPlaying);
+            _soundButtonBackground.color = new Color(0.9333333f, 0.5508261f, 0.5058824f);
+            _musicIsPlaying = false;
+        }
+        else
+        {
+            _audioController.SwitchSound(_musicIsPlaying);
+            _soundButtonBackground.color = new Color(0.5058824f, 0.9333333f, 0.572549f);
+            _musicIsPlaying = true;
+        }
+    }
+    public void PauseGame() 
+    {
+        if (_gamePaused)
+        {
+            Time.timeScale = 1;
+            _gamePaused = false;
+        }
+        else
+        {
+            Time.timeScale = 0;
+            _gamePaused = true;
+        }
     }
     private void HireWarrior()
     {
@@ -142,6 +187,8 @@ public class GameManager : MonoBehaviour
         _hireWarriorTimer.CycleCompleted = false;
         _hireWarriorButton.interactable = true;
         _warriorsConsumeWheat = true;
+
+        _audioController.CreateWarrior.Play();
     }
     private void HirePeasant()
     {
@@ -149,27 +196,31 @@ public class GameManager : MonoBehaviour
         _peasants++;
         _hirePeasantTimer.CycleCompleted = false;
         _hirePeasantButton.interactable = true;
+
+        _audioController.CreatePeasant.Play();
     }
     private void EnemyAttack()
     {
+        _audioController.PlayFightSound();
+
         if (_warriors >= _waveEnemies[_wave])
         {
             _warriors -= _waveEnemies[_wave];
             _died += _waveEnemies[_wave];
-            if (_warriorsConsumeWheat)
-            {
-
-            }
         }
         else
         {
             _died += _warriors;
             _villageCaptured = true;
+
+            _audioController.PlayFailureSound();
         }
     }
     private void CreateWheat()
     {
         _wheat += (_peasants * _peasantProduce);
+
+        _audioController.CreateWheat.Play();
     }
     private void ConsumeWheat()
     {
@@ -182,6 +233,8 @@ public class GameManager : MonoBehaviour
             _died += _warriors;
             _warriors = 0;
         }
+
+        _audioController.Consume.Play();
     }
     private void PrintResourcesInfo()
     {
@@ -215,6 +268,11 @@ public class GameManager : MonoBehaviour
             _waveTimer.CycleCompleted = false;
             _waveTimer.gameObject.SetActive(false);
             _gameOver = true;
+
+            if (_villageCaptured == false)
+            {
+                _audioController.PlayVictorySound();
+            }
         }
     }
     private void SwitchButton()
@@ -251,7 +309,7 @@ public class GameManager : MonoBehaviour
             results.text = $"Waves: {_wave + 1}/{_waveEnemies.Length}\n\nWarriors died: {_died}";
         }
 
-        
+
     }
     private void CheckEndGame()
     {
@@ -260,5 +318,5 @@ public class GameManager : MonoBehaviour
             PrintResults();
             GameEnd.Invoke();
         }
-    } 
+    }
 }
